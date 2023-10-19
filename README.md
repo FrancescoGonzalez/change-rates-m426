@@ -1,30 +1,30 @@
 # change-rates-m426
 
-- Utilizzare "fixer.io"
+Come API di conversione ho scelto **fixer.io**, che è facile e conveniente.
 
-- API key:
-  24aa603ac83ad85bfcd29cd112e7ee36
+- La mia API key: 24aa603ac83ad85bfcd29cd112e7ee36
 
 - chiamate utili:
 
-  http://data.fixer.io/api/symbols
-  ? access_key = 24aa603ac83ad85bfcd29cd112e7ee36
+
+    http://data.fixer.io/api/symbols
+        ? access_key = APIKEY
 
 
 
     http://data.fixer.io/api/latest
-        ? access_key = 24aa603ac83ad85bfcd29cd112e7ee36
+        ? access_key = APIKEY
 
 
     http://data.fixer.io/api/latest
-        ? access_key = 24aa603ac83ad85bfcd29cd112e7ee36
+        ? access_key = APIKEY
         & symbols = USD,CAD,JPY
 
 
 
 - metodi fatti:
 
-  double convertAmount(from, to, amount);
+double convertAmount(from, to, amount);
 
   String getFullName(currency);
 
