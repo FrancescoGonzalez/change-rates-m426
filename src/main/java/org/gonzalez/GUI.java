@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.Map;
 
 public class GUI extends JFrame {
-    private static final CurrencyService c = new CurrencyService(new RemoteCurrentServicePort("13e4351b9d6e76b6f390c211b57315d4"));
+    private static final CurrencyService c = new CurrencyService(new RemoteCurrentServicePort("b845daf4ed306e660d257548134a6e3c"));
     //up
     private static final JLabel from = new JLabel("From");
     private static JTextField fromTextField = new JTextField();
@@ -69,11 +69,19 @@ public class GUI extends JFrame {
         load();
 
         fromInput.addActionListener(e -> {
-            String fromText = fromTextField.getText();
-            String toText = toTextField.getText();
+            try {
+                String fromText = fromTextField.getText();
+                String toText = toTextField.getText();
+                toLabel.setText(String.valueOf(c.convertAmount(fromText, toText, Double.parseDouble(fromInput.getText()))));
+                loadSingularChange(fromText, toText);
+            } catch (NullPointerException ex) {
+                JOptionPane.showConfirmDialog(null,
+                        "One of the 2 currencies is not valid",
+                        "Error",
+                        JOptionPane.OK_CANCEL_OPTION ,
+                        JOptionPane.WARNING_MESSAGE);
+            }
 
-            toLabel.setText(String.valueOf(c.convertAmount(fromText, toText, Double.parseDouble(fromInput.getText()))));
-            loadSingularChange(fromText, toText);
 
         });
 

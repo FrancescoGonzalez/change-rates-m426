@@ -2,7 +2,7 @@
 
 Come API di conversione ho scelto **fixer.io**, che è facile e conveniente.
 
-- La mia API key: 13e4351b9d6e76b6f390c211b57315d4
+- La mia API key: b845daf4ed306e660d257548134a6e3c
 
 - chiamate utili:
 
