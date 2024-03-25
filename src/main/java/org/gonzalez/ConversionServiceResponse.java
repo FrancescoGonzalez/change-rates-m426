@@ -7,14 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConversionServiceResponse{
-    private final String from;
-    private final String to;
     private final Map<String, String> currencyNames = new HashMap<>();
     private final double[] values = new double[2];
 
     public ConversionServiceResponse(String body, String from, String to) {
-        this.from = from;
-        this.to = to;
         try {
             JSONParser parser = new JSONParser();
             JSONObject jsonObject = (JSONObject) parser.parse(body); //trasforma un JSON da string a oggetto
@@ -27,8 +23,6 @@ public class ConversionServiceResponse{
         }
     }
     public ConversionServiceResponse(String body) {
-        this.from = "";
-        this.to = "";
         try {
             JSONParser parser = new JSONParser();
             JSONObject json = (JSONObject) parser.parse(body);
@@ -43,14 +37,6 @@ public class ConversionServiceResponse{
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public String getTo() {
-        return to;
     }
 
     public double getValueFrom() {

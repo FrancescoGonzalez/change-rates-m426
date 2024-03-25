@@ -70,35 +70,44 @@ public class GUI extends JFrame {
         new GUI();
         load();
 
-        convert.addActionListener(e -> {
-            try {
-                String fromText = fromTextField.getText();
-                String toText = toTextField.getText();
-                String input = fromInput.getText();
-                c.checkIfExists(fromText, toText);
-                toLabel.setText(String.valueOf(round(c.convertAmount(fromText, toText, fromStringToDouble(input)))));
-                loadSingularChange(fromText, toText);
-            } catch (InvalidCurrencyException ex) {
-                JOptionPane.showConfirmDialog(null,
-                        ex.getMessage() + "\n Try again with a different value",
-                        "Invalid Currency",
-                        JOptionPane.DEFAULT_OPTION,
-                        JOptionPane.WARNING_MESSAGE);
-            } catch (IllegalArgumentException ex) {
-                JOptionPane.showConfirmDialog(null,
-                    ex.getMessage() + "\n Try again with a different value",
-                    "Invalid Value",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.WARNING_MESSAGE);
-            }
-        });
+        convert.addActionListener(e -> convert());
+
+        fromInput.addActionListener(e -> convert());
 
 
+    }
+
+    public static void convert() {
+        try {
+            String fromText = fromTextField.getText();
+            String toText = toTextField.getText();
+            String input = fromInput.getText();
+            c.checkIfExists(fromText, toText);
+            updateToLabel(c.convertAmount(fromText, toText, fromStringToDouble(input)));
+            loadSingularChange(fromText, toText);
+        } catch (InvalidCurrencyException ex) {
+            JOptionPane.showConfirmDialog(null,
+                ex.getMessage() + "\n Try again with a different value",
+                "Invalid Currency",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showConfirmDialog(null,
+                ex.getMessage() + "\n Try again with a different value",
+                "Invalid Value",
+                JOptionPane.DEFAULT_OPTION);
+
+        }
     }
 
     public static void load() {
         loadExchanges();
         loadSingularChange("CHF", "USD");
+    }
+
+    public static void updateToLabel(double value) {
+        double roundedValue = round(value);
+        toLabel.setText(roundedValue != 0 ? String.valueOf(roundedValue) : "<0.001");
     }
 
     public static void loadExchanges() {
@@ -111,11 +120,17 @@ public class GUI extends JFrame {
 
     public static void loadSingularChange(String from, String to) {
         double amount = c.convertAmount(from, to, 1);
-        change.setText(String.format("( 1 %s -> %s %s )", from, round(amount), to));
+        change.setText(round(amount) != 0 ? String.format("( 1 %s ≈ %s %s )", from, round(amount), to) : String.format("( 1 %s < 0.001 %s )", from, to));
+        changeStringValues(from.toUpperCase(), to.toUpperCase());
     }
 
     public static double round(double n) {
         return (double) ((int) (n * 1000)) / 1000;
+    }
+
+    public static void changeStringValues(String fromCurrency, String toCurrency) {
+        fromString.setText(fromCurrency);
+        toString.setText(toCurrency);
     }
 
     public static double fromStringToDouble(String d) {
