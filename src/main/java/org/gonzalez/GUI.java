@@ -8,19 +8,19 @@ public class GUI extends JFrame {
     private static final CurrencyService c = new CurrencyService(new RemoteCurrentServicePort("b845daf4ed306e660d257548134a6e3c"));
     //up
     private static final JLabel from = new JLabel("From");
-    private static JTextField fromTextField = new JTextField("chf");
+    private static final JTextField fromTextField = new JTextField("chf");
     private static final JLabel to = new JLabel("to");
-    private static JTextField toTextField = new JTextField("usd");
+    private static final JTextField toTextField = new JTextField("usd");
     //middle
-    private static JTextField fromInput = new JTextField();
-    private static JLabel fromString = new JLabel(fromTextField.getText());
+    private static final JTextField fromInput = new JTextField();
+    private static final JLabel fromString = new JLabel(fromTextField.getText());
     private static final JLabel text = new JLabel("<====>");
-    private static JLabel toLabel = new JLabel("xxxx");
-    private static JLabel toString = new JLabel(toTextField.getText());
-    private static JButton convert = new JButton("convert");
-    private static JLabel change = new JLabel("(-.- CHF -> -.- USD)");
+    private static final JLabel toLabel = new JLabel("xxxx");
+    private static final JLabel toString = new JLabel(toTextField.getText());
+    private static final JButton convert = new JButton("convert");
+    private static final JLabel change = new JLabel("(-.- CHF -> -.- USD)");
     //down
-    private static JLabel exchanges = new JLabel("1CHF = -.- EUR | -.- USD | -.- COP | -.- CAD");
+    private static final JLabel exchanges = new JLabel("1CHF = -.- EUR | -.- USD | -.- COP | -.- CAD");
 
     public GUI() {
         setTitle("Currency converter");
@@ -104,10 +104,6 @@ public class GUI extends JFrame {
     public static void loadSingularChange(String from, String to) {
         double amount = c.convertAmount(from, to, 1);
         change.setText(String.format("( 1 %s -> %s %s )", from, round(amount), to));
-    }
-
-    public static void changeResult(double amount) {
-        toLabel.setText(String.valueOf(amount));
     }
 
     public static double round(double n) {
