@@ -136,7 +136,7 @@ public class GUI extends JFrame {
     public static double fromStringToDouble(String d) {
         try {
             double n = Double.parseDouble(d);
-            if (n < 0) throw new IllegalArgumentException("The number should be positive");
+            if (n <= 0) throw new IllegalArgumentException("The number should be positive");
             return n;
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("You need to put a valid number");
