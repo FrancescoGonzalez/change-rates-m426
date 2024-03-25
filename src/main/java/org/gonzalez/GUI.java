@@ -74,14 +74,22 @@ public class GUI extends JFrame {
             try {
                 String fromText = fromTextField.getText();
                 String toText = toTextField.getText();
-                toLabel.setText(String.valueOf(round(c.convertAmount(fromText, toText, Double.parseDouble(fromInput.getText())))));
+                String input = fromInput.getText();
+                c.checkIfExists(fromText, toText);
+                toLabel.setText(String.valueOf(round(c.convertAmount(fromText, toText, fromStringToDouble(input)))));
                 loadSingularChange(fromText, toText);
-            } catch (NullPointerException ex) {
+            } catch (InvalidCurrencyException ex) {
                 JOptionPane.showConfirmDialog(null,
-                        "One of the 2 currencies is not valid",
-                        "Error",
-                        JOptionPane.OK_CANCEL_OPTION ,
+                        ex.getMessage() + "\n Try again with a different value",
+                        "Invalid Currency",
+                        JOptionPane.DEFAULT_OPTION,
                         JOptionPane.WARNING_MESSAGE);
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showConfirmDialog(null,
+                    ex.getMessage() + "\n Try again with a different value",
+                    "Invalid Value",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
             }
         });
 
@@ -108,6 +116,16 @@ public class GUI extends JFrame {
 
     public static double round(double n) {
         return (double) ((int) (n * 1000)) / 1000;
+    }
+
+    public static double fromStringToDouble(String d) {
+        try {
+            double n = Double.parseDouble(d);
+            if (n < 0) throw new IllegalArgumentException("The number should be positive");
+            return n;
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("You need to put a valid number");
+        }
     }
 
 
