@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class Tester {
     public static void main(String[] args) {
-        CurrencyService c = new CurrencyService(new RemoteCurrentServicePort("24aa603ac83ad85bfcd29cd112e7ee36"));
+        CurrencyService c = new CurrencyService(new RemoteCurrencyServicePort("24aa603ac83ad85bfcd29cd112e7ee36"));
 
         Map<String, Double> m = c.convertMoreAmounts("chf", "usd", "eur", "cop", "cad");
 

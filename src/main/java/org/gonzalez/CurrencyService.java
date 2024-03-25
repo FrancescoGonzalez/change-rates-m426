@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CurrencyService {
-    private final RemoteCurrentServicePort remoteService;
+    private final RemoteCurrencyServicePort remoteService;
 
     private final ConversionServiceResponse currencyList;
 
-    public CurrencyService(RemoteCurrentServicePort remoteService) {
+    public CurrencyService(RemoteCurrencyServicePort remoteService) {
         this.remoteService = remoteService;
         currencyList = remoteService.getCurrencies();
     }
@@ -30,7 +30,7 @@ public class CurrencyService {
     public void checkIfExists(String... c) {
         for (String currency : c) {
             if (currencyList.getFullName(currency.toUpperCase()) == null) {
-                throw new InvalidCurrencyException("the currency " + currency + " doesn't exist");
+                throw new InvalidCurrencyException("the currency \"" + currency + "\" doesn't exist");
             }
         }
     }

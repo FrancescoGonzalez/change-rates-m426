@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.Map;
 
 public class GUI extends JFrame {
-    private static final CurrencyService c = new CurrencyService(new RemoteCurrentServicePort("b845daf4ed306e660d257548134a6e3c"));
+    private static final CurrencyService c = new CurrencyService(new RemoteCurrencyServicePort("b845daf4ed306e660d257548134a6e3c"));
     //up
     private static final JLabel from = new JLabel("From");
     private static final JTextField fromTextField = new JTextField("chf");
