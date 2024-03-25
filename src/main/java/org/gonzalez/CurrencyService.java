@@ -14,7 +14,7 @@ public class CurrencyService {
         isValid(from);
         isValid(to);
 
-        ConversionServiceResponse c = remoteService.callConvertionService(from.toUpperCase(), to.toUpperCase());
+        ConversionServiceResponse c = remoteService.getConversionRates(from.toUpperCase(), to.toUpperCase());
 
         return (amount / c.getValueFrom()) * c.getValueTo();
     }
@@ -22,7 +22,7 @@ public class CurrencyService {
     public String getFullName(String currency) {
         isValid(currency);
 
-        ConversionServiceResponse c = remoteService.callConvertionService(currency.toUpperCase());
+        ConversionServiceResponse c = remoteService.getCurrencies();
         if (c.getFullName(currency) == null) {
             throw new InvalidCurrencyException("the currency " + currency + " doesn't exist");
         }

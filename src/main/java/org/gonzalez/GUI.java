@@ -8,15 +8,16 @@ public class GUI extends JFrame {
     private static final CurrencyService c = new CurrencyService(new RemoteCurrentServicePort("b845daf4ed306e660d257548134a6e3c"));
     //up
     private static final JLabel from = new JLabel("From");
-    private static JTextField fromTextField = new JTextField();
+    private static JTextField fromTextField = new JTextField("chf");
     private static final JLabel to = new JLabel("to");
-    private static JTextField toTextField = new JTextField();
+    private static JTextField toTextField = new JTextField("usd");
     //middle
     private static JTextField fromInput = new JTextField();
     private static JLabel fromString = new JLabel(fromTextField.getText());
     private static final JLabel text = new JLabel("<====>");
     private static JLabel toLabel = new JLabel("xxxx");
     private static JLabel toString = new JLabel(toTextField.getText());
+    private static JButton convert = new JButton("convert");
     private static JLabel change = new JLabel("(-.- CHF -> -.- USD)");
     //down
     private static JLabel exchanges = new JLabel("1CHF = -.- EUR | -.- USD | -.- COP | -.- CAD");
@@ -24,7 +25,7 @@ public class GUI extends JFrame {
     public GUI() {
         setTitle("Currency converter");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(new Dimension(400,150));
+        setSize(new Dimension(400,175));
 
         JPanel panelUp = new JPanel();
 
@@ -38,6 +39,7 @@ public class GUI extends JFrame {
         JPanel panelCenterTop = new JPanel();
         JPanel panelCenterDown = new JPanel();
 
+        panelCenterDown.add(convert);
         panelCenterDown.add(change);
 
         panelCenterTop.add(fromInput);
@@ -57,8 +59,8 @@ public class GUI extends JFrame {
         getContentPane().add(BorderLayout.CENTER, panelCenter);
         getContentPane().add(BorderLayout.SOUTH, panelDown);
 
-        fromTextField.setPreferredSize(new Dimension(75, 24));
-        toTextField.setPreferredSize(new Dimension(75, 24));
+        fromTextField.setPreferredSize(new Dimension(35, 24));
+        toTextField.setPreferredSize(new Dimension(35, 24));
         fromInput.setPreferredSize(new Dimension(75, 24));
         setVisible(true);
 
@@ -68,11 +70,11 @@ public class GUI extends JFrame {
         new GUI();
         load();
 
-        fromInput.addActionListener(e -> {
+        convert.addActionListener(e -> {
             try {
                 String fromText = fromTextField.getText();
                 String toText = toTextField.getText();
-                toLabel.setText(String.valueOf(c.convertAmount(fromText, toText, Double.parseDouble(fromInput.getText()))));
+                toLabel.setText(String.valueOf(round(c.convertAmount(fromText, toText, Double.parseDouble(fromInput.getText())))));
                 loadSingularChange(fromText, toText);
             } catch (NullPointerException ex) {
                 JOptionPane.showConfirmDialog(null,
@@ -81,8 +83,6 @@ public class GUI extends JFrame {
                         JOptionPane.OK_CANCEL_OPTION ,
                         JOptionPane.WARNING_MESSAGE);
             }
-
-
         });
 
 
@@ -103,20 +103,15 @@ public class GUI extends JFrame {
 
     public static void loadSingularChange(String from, String to) {
         double amount = c.convertAmount(from, to, 1);
-
-        change.setText(String.format("( 1 %s -> %s %s )", from, String.format("%.2f", amount), to));
-
-
-        for (int i = 0; i < 10; i++) {
-            if ((int) amount * Math.pow(10, i) != 0) {
-                change.setText(String.format("( 1 %s -> %s %s )", from, String.format("%.4f", amount), to));
-
-            }
-        }
+        change.setText(String.format("( 1 %s -> %s %s )", from, round(amount), to));
     }
 
     public static void changeResult(double amount) {
         toLabel.setText(String.valueOf(amount));
+    }
+
+    public static double round(double n) {
+        return (double) ((int) (n * 1000)) / 1000;
     }
 
 
