@@ -4,31 +4,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CurrencyService {
-    private final RemoteCurrentServicePort remoteService;
+    private final RemoteCurrencyServicePort remoteService;
 
-    public CurrencyService(RemoteCurrentServicePort remoteService) {
+    private final ConversionServiceResponse currencyList;
+
+    public CurrencyService(RemoteCurrencyServicePort remoteService) {
         this.remoteService = remoteService;
+        currencyList = remoteService.getCurrencies();
     }
 
     public double convertAmount(String from, String to, double amount){
-        isValid(from);
-        isValid(to);
+        isValid(from, to);
 
-        ConversionServiceResponse c = remoteService.callConvertionService(from.toUpperCase(), to.toUpperCase());
+        ConversionServiceResponse c = remoteService.getConversionRates(from.toUpperCase(), to.toUpperCase());
 
         return (amount / c.getValueFrom()) * c.getValueTo();
     }
 
     public String getFullName(String currency) {
         isValid(currency);
+        return currencyList.getFullName(currency);
 
-        ConversionServiceResponse c = remoteService.callConvertionService(currency.toUpperCase());
-        if (c.getFullName(currency) == null) {
-            throw new InvalidCurrencyException("the currency " + currency + " doesn't exist");
+    }
+
+    public void checkIfExists(String... c) {
+        for (String currency : c) {
+            if (currencyList.getFullName(currency.toUpperCase()) == null) {
+                throw new InvalidCurrencyException("the currency \"" + currency + "\" doesn't exist");
+            }
         }
-
-        return c.getFullName(currency);
-
     }
 
     public Map<String, Double> convertMoreAmounts(String from, String... amounts) { // calls convertAmounts(); for every amount, and add the result to an array
@@ -44,9 +48,13 @@ public class CurrencyService {
 
     }
 
-    public void isValid(String currency) { // if is NOT valid it will throw an exception
-        if (currency.length() != 3) {
-            throw new InvalidCurrencyException("The currency " + currency + " needs to be of 3 letters to be valid");
+    public void isValid(String... c) { // if is NOT valid it will throw an exception
+        for (String currency : c) {
+            if (currency.length() != 3) {
+                throw new InvalidCurrencyException("The currency " + currency + " needs to be of 3 letters to be valid");
+            }
         }
+        checkIfExists(c);
+
     }
 }
