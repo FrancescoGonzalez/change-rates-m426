@@ -51,7 +51,7 @@ public class CurrencyService {
     public void isValid(String... c) { // if is NOT valid it will throw an exception
         for (String currency : c) {
             if (currency.length() != 3) {
-                throw new InvalidCurrencyException("The currency " + currency + " needs to be of 3 letters to be valid");
+                throw new InvalidCurrencyException("The currency \"" + currency + "\" needs to be of 3 letters to be valid");
             }
         }
         checkIfExists(c);
