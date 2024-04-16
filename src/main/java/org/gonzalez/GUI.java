@@ -8,11 +8,11 @@ public class GUI extends JFrame {
     private static final CurrencyService c = new CurrencyService(new RemoteCurrentServicePort("b845daf4ed306e660d257548134a6e3c"));
     //up
     private static final JLabel from = new JLabel("From");
-    private static JTextField fromTextField = new JTextField();
+    private static JTextField fromTextField = new JTextField(6);
     private static final JLabel to = new JLabel("to");
-    private static JTextField toTextField = new JTextField();
+    private static JTextField toTextField = new JTextField(6);
     //middle
-    private static JTextField fromInput = new JTextField();
+    private static JTextField fromInput = new JTextField(6);
     private static JLabel fromString = new JLabel(fromTextField.getText());
     private static final JLabel text = new JLabel("<====>");
     private static JLabel toLabel = new JLabel("xxxx");
@@ -57,9 +57,6 @@ public class GUI extends JFrame {
         getContentPane().add(BorderLayout.CENTER, panelCenter);
         getContentPane().add(BorderLayout.SOUTH, panelDown);
 
-        fromTextField.setPreferredSize(new Dimension(75, 24));
-        toTextField.setPreferredSize(new Dimension(75, 24));
-        fromInput.setPreferredSize(new Dimension(75, 24));
         setVisible(true);
 
     }
@@ -72,9 +69,10 @@ public class GUI extends JFrame {
             try {
                 String fromText = fromTextField.getText();
                 String toText = toTextField.getText();
-                toLabel.setText(String.valueOf(c.convertAmount(fromText, toText, Double.parseDouble(fromInput.getText()))));
+                double convertedAmount = c.convertAmount(fromText, toText, Double.parseDouble(fromInput.getText()));
+                changeResult(convertedAmount, toText);
                 loadSingularChange(fromText, toText);
-            } catch (NullPointerException ex) {
+            } catch (InvalidCurrencyException ex) {
                 JOptionPane.showConfirmDialog(null,
                         "One of the 2 currencies is not valid",
                         "Error",
@@ -115,8 +113,8 @@ public class GUI extends JFrame {
         }
     }
 
-    public static void changeResult(double amount) {
-        toLabel.setText(String.valueOf(amount));
+    public static void changeResult(double amount, String currency) {
+        toLabel.setText((amount >= 0.001? String.format("%.3f", amount) : "< 0.001") + " " + currency.toUpperCase());
     }
 
 
