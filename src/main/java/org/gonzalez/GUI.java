@@ -69,7 +69,11 @@ public class GUI extends JFrame {
             try {
                 String fromText = fromTextField.getText();
                 String toText = toTextField.getText();
-                double amount = Double.parseDouble(fromInput.getText());
+                String fromInputStr = fromInput.getText();
+                if (fromInputStr.isEmpty()) {
+                    throw new InvalidCurrencyException("You cannot send empty values");
+                }
+                double amount = Double.parseDouble(fromInputStr);
                 if (amount <= 0) {
                     throw new InvalidCurrencyException("The amount should be greater than 0");
                 }
@@ -79,6 +83,12 @@ public class GUI extends JFrame {
             } catch (InvalidCurrencyException ex) {
                 JOptionPane.showConfirmDialog(null,
                         ex.getMessage(),
+                        "Error",
+                        JOptionPane.OK_CANCEL_OPTION ,
+                        JOptionPane.WARNING_MESSAGE);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showConfirmDialog(null,
+                        "You cannot send the value as a string",
                         "Error",
                         JOptionPane.OK_CANCEL_OPTION ,
                         JOptionPane.WARNING_MESSAGE);
