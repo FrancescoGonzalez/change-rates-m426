@@ -21,12 +21,6 @@ public class CurrencyService {
         return (amount / c.getValueFrom()) * c.getValueTo();
     }
 
-    public String getFullName(String currency) {
-        isValid(currency);
-        return currencyList.getFullName(currency);
-
-    }
-
     public void checkIfExists(String... c) {
         for (String currency : c) {
             if (currencyList.getFullName(currency.toUpperCase()) == null) {
@@ -48,16 +42,22 @@ public class CurrencyService {
 
     }
 
-    public void isValid(String... c) { // if is NOT valid it will throw an exception
+    public boolean isValid(String... c) { // if is NOT valid it will throw an exception
         for (String currency : c) {
-            if (currency.isEmpty()) {
-                throw new InvalidCurrencyException("You cannot send empty values");
-            }
-            if (currency.length() != 3) {
-                throw new InvalidCurrencyException("The currency \"" + currency + "\" needs to be of 3 letters to be valid");
-            }
+            charactersValidityTest(currency);
         }
         checkIfExists(c);
+        return true;
 
+    }
+
+    public static boolean charactersValidityTest(String currency) {
+        if (currency.isEmpty()) {
+            throw new InvalidCurrencyException("You cannot send empty values");
+        }
+        if (currency.length() != 3) {
+            throw new InvalidCurrencyException("The currency \"" + currency + "\" needs to be of 3 letters to be valid");
+        }
+        return true;
     }
 }
